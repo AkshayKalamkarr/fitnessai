@@ -27,17 +27,14 @@
         background: #00c6ff;
         color: white;
       }
-
       .register-btn {
         background: #ff416c;
         color: white;
       }
-
       .dashboard-btn {
         background: #28a745;
         color: white;
       }
-
       .admin-btn {
         background: #ff4b2b;
         color: white;
@@ -55,7 +52,7 @@
       <div class="logo">Fit Club</div>
 
       <div class="nav-buttons">
-        <!-- Default buttons -->
+        <!-- Buttons -->
         <button
           class="btn login"
           id="loginBtn"
@@ -63,6 +60,7 @@
         >
           Login
         </button>
+
         <button
           class="btn register"
           id="registerBtn"
@@ -70,6 +68,7 @@
         >
           Register
         </button>
+
         <button
           class="btn dashboard"
           id="dashboardBtn"
@@ -77,6 +76,7 @@
         >
           Dashboard
         </button>
+
         <button
           class="btn admin"
           id="adminBtn"
@@ -85,7 +85,6 @@
           Admin
         </button>
 
-        <!-- After login -->
         <button class="btn logout" id="logoutBtn" style="display: none">
           Logout
         </button>
@@ -94,37 +93,60 @@
 
     <main>
       <h1 class="bgtext">AI Powered Fitness System</h1>
-
-      <div class="chat-box">
-        <div class="h1">Talk to your own assistant...</div>
-
-        <div class="chat-container"></div>
-
-        <div class="input-area">
-          <input type="text" class="prompt" placeholder="Ask anything..." />
-          <button><img src="btn.svg" alt="img" /></button>
-        </div>
-      </div>
-
-      <div class="virtual-assistant">
-        <img src="ai.png" alt="img" width="120px" />
-      </div>
-
-      <!-- Quick Access Section -->
-      <section style="text-align: center; margin-top: 40px">
-        <h2>Start Your Fitness Journey</h2>
-        <br />
-        <a href="pages/workout.html" class="btn login-btn">Explore Workouts</a>
-        <a href="pages/register.html" class="btn register-btn">Join Now</a>
-      </section>
     </main>
 
-    <div class="speak-page">
-      <img src="ai.png" alt="img" width="200px" />
-      <h1>Speak Now</h1>
-      <img src="voice.gif" alt="img" width="200px" id="voice" />
-    </div>
-
     <script src="script.js"></script>
+
+    <!-- ✅ UPDATED LOGIN STATE SCRIPT -->
+    <script>
+      const token = localStorage.getItem("token");
+
+      const loginBtn = document.getElementById("loginBtn");
+      const registerBtn = document.getElementById("registerBtn");
+      const dashboardBtn = document.getElementById("dashboardBtn");
+      const adminBtn = document.getElementById("adminBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (token) {
+        // AFTER LOGIN
+        loginBtn.style.display = "none";
+        registerBtn.style.display = "none";
+        adminBtn.style.display = "none";
+
+        dashboardBtn.style.display = "inline-block";
+        logoutBtn.style.display = "inline-block";
+      } else {
+        // BEFORE LOGIN
+        loginBtn.style.display = "inline-block";
+        registerBtn.style.display = "inline-block";
+        dashboardBtn.style.display = "inline-block";
+        adminBtn.style.display = "inline-block";
+
+        logoutBtn.style.display = "none";
+      }
+
+      // Logout
+      logoutBtn.addEventListener("click", function () {
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        window.location.href = "index.html";
+      });
+
+      const role = localStorage.getItem("role");
+
+      if (token) {
+        loginBtn.style.display = "none";
+        registerBtn.style.display = "none";
+
+        dashboardBtn.style.display = "inline-block";
+        logoutBtn.style.display = "inline-block";
+
+        if (role === "admin") {
+          adminBtn.style.display = "inline-block";
+        } else {
+          adminBtn.style.display = "none";
+        }
+      }
+    </script>
   </body>
 </html>

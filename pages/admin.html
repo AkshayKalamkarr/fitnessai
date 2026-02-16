@@ -142,12 +142,10 @@
     <script>
       const token = localStorage.getItem("token");
 
-      // If no token → go login
       if (!token) {
         window.location.href = "login.html";
       }
 
-      // Fetch All Users
       async function fetchUsers() {
         try {
           const res = await fetch("http://localhost:5000/api/admin/users", {
@@ -155,6 +153,16 @@
               Authorization: "Bearer " + token,
             },
           });
+
+          if (res.status === 403) {
+            alert("Admin access only!");
+            window.location.href = "../index.html";
+            return;
+          }
+
+          if (!res.ok) {
+            throw new Error("Unauthorized");
+          }
 
           const users = await res.json();
 
@@ -169,28 +177,27 @@
             if (user.goal === "Muscle Gain") muscleGain++;
 
             table.innerHTML += `
-                <tr>
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td>${user.age || "-"}</td>
-                    <td>${user.goal || "-"}</td>
-                    <td>
-                        <button class="delete" onclick="deleteUser('${user._id}')">Delete</button>
-                    </td>
-                </tr>
-            `;
+          <tr>
+            <td>${user.fullName || user.username}</td>
+            <td>${user.email || "-"}</td>
+            <td>${user.age || "-"}</td>
+            <td>${user.goal || "-"}</td>
+            <td>
+              <button class="delete" onclick="deleteUser('${user._id}')">Delete</button>
+            </td>
+          </tr>
+        `;
           });
 
           document.getElementById("totalUsers").innerText = users.length;
           document.getElementById("weightLoss").innerText = weightLoss;
           document.getElementById("muscleGain").innerText = muscleGain;
-        } catch (error) {   
+        } catch (error) {
           alert("Unauthorized Access");
-          window.location.href = "login.html";
+          window.location.href = "../index.html";
         }
       }
 
-      // Delete User
       async function deleteUser(id) {
         if (!confirm("Are you sure to delete this user?")) return;
 
@@ -204,13 +211,11 @@
         fetchUsers();
       }
 
-      // Logout
       function logout() {
         localStorage.removeItem("token");
         window.location.href = "login.html";
       }
 
-      // Load users on page load
       fetchUsers();
     </script>
   </body>
