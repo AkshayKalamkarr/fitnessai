@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Admin Dashboard | AI Fitness</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #000000, #434343);
+        color: white;
+      }
+
+      header {
+        background: linear-gradient(45deg, #ff416c, #ff4b2b);
+        padding: 20px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        position: relative;
+      }
+
+      .logout {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        padding: 8px 15px;
+        border: none;
+        background: black;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: #1c1c1c;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      th {
+        background: #ff4b2b;
+        padding: 12px;
+      }
+
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #333;
+        text-align: center;
+      }
+
+      tr:hover {
+        background: #2a2a2a;
+      }
+
+      button {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 2px;
+        font-size: 12px;
+      }
+
+      .delete {
+        background: #dc3545;
+        color: white;
+      }
+
+      .stats {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .card {
+        background: #1c1c1c;
+        padding: 20px;
+        border-radius: 10px;
+        flex: 1;
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .card h3 {
+        margin: 0;
+      }
+
+      .card p {
+        font-size: 24px;
+        margin-top: 10px;
+        color: #ff4b2b;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      AI Fitness Admin Panel
+      <button class="logout" onclick="logout()">Logout</button>
+    </header>
+
+    <div class="container">
+      <div class="stats">
+        <div class="card">
+          <h3>Total Users</h3>
+          <p id="totalUsers">0</p>
+        </div>
+
+        <div class="card">
+          <h3>Weight Loss Members</h3>
+          <p id="weightLoss">0</p>
+        </div>
+
+        <div class="card">
+          <h3>Muscle Gain Members</h3>
+          <p id="muscleGain">0</p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Goal</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userTable"></tbody>
+      </table>
+    </div>
+
+    <script>
+      const token = localStorage.getItem("token");
+
+      // If no token → go login
+      if (!token) {
+        window.location.href = "login.html";
+      }
+
+      // Fetch All Users
+      async function fetchUsers() {
+        try {
+          const res = await fetch("http://localhost:5000/api/admin/users", {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          });
+
+          const users = await res.json();
+
+          const table = document.getElementById("userTable");
+          table.innerHTML = "";
+
+          let weightLoss = 0;
+          let muscleGain = 0;
+
+          users.forEach((user) => {
+            if (user.goal === "Weight Loss") weightLoss++;
+            if (user.goal === "Muscle Gain") muscleGain++;
+
+            table.innerHTML += `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.age || "-"}</td>
+                    <td>${user.goal || "-"}</td>
+                    <td>
+                        <button class="delete" onclick="deleteUser('${user._id}')">Delete</button>
+                    </td>
+                </tr>
+            `;
+          });
+
+          document.getElementById("totalUsers").innerText = users.length;
+          document.getElementById("weightLoss").innerText = weightLoss;
+          document.getElementById("muscleGain").innerText = muscleGain;
+        } catch (error) {   
+          alert("Unauthorized Access");
+          window.location.href = "login.html";
+        }
+      }
+
+      // Delete User
+      async function deleteUser(id) {
+        if (!confirm("Are you sure to delete this user?")) return;
+
+        await fetch(`http://localhost:5000/api/admin/user/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        fetchUsers();
+      }
+
+      // Logout
+      function logout() {
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
+
+      // Load users on page load
+      fetchUsers();
+    </script>
+  </body>
+</html>

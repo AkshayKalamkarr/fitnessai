@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Powered Fitness System</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      .auth-buttons {
+        display: flex;
+        gap: 10px;
+        margin-left: 20px;
+      }
+
+      .btn {
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .login-btn {
+        background: #00c6ff;
+        color: white;
+      }
+
+      .register-btn {
+        background: #ff416c;
+        color: white;
+      }
+
+      .dashboard-btn {
+        background: #28a745;
+        color: white;
+      }
+
+      .admin-btn {
+        background: #ff4b2b;
+        color: white;
+      }
+
+      .btn:hover {
+        opacity: 0.85;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <div class="logo">Fit Club</div>
+
+      <div class="nav-buttons">
+        <!-- Default buttons -->
+        <button
+          class="btn login"
+          id="loginBtn"
+          onclick="location.href = 'pages/login.html'"
+        >
+          Login
+        </button>
+        <button
+          class="btn register"
+          id="registerBtn"
+          onclick="location.href = 'pages/register.html'"
+        >
+          Register
+        </button>
+        <button
+          class="btn dashboard"
+          id="dashboardBtn"
+          onclick="location.href = 'pages/dashboard.html'"
+        >
+          Dashboard
+        </button>
+        <button
+          class="btn admin"
+          id="adminBtn"
+          onclick="location.href = 'pages/admin.html'"
+        >
+          Admin
+        </button>
+
+        <!-- After login -->
+        <button class="btn logout" id="logoutBtn" style="display: none">
+          Logout
+        </button>
+      </div>
+    </nav>
+
+    <main>
+      <h1 class="bgtext">AI Powered Fitness System</h1>
+
+      <div class="chat-box">
+        <div class="h1">Talk to your own assistant...</div>
+
+        <div class="chat-container"></div>
+
+        <div class="input-area">
+          <input type="text" class="prompt" placeholder="Ask anything..." />
+          <button><img src="btn.svg" alt="img" /></button>
+        </div>
+      </div>
+
+      <div class="virtual-assistant">
+        <img src="ai.png" alt="img" width="120px" />
+      </div>
+
+      <!-- Quick Access Section -->
+      <section style="text-align: center; margin-top: 40px">
+        <h2>Start Your Fitness Journey</h2>
+        <br />
+        <a href="pages/workout.html" class="btn login-btn">Explore Workouts</a>
+        <a href="pages/register.html" class="btn register-btn">Join Now</a>
+      </section>
+    </main>
+
+    <div class="speak-page">
+      <img src="ai.png" alt="img" width="200px" />
+      <h1>Speak Now</h1>
+      <img src="voice.gif" alt="img" width="200px" id="voice" />
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

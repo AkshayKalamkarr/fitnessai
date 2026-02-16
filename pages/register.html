@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register | AI Fitness</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #000000, #1c1c1c);
+            padding: 20px;
+        }
+
+        .card {
+            width: 450px;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0,255,204,0.2);
+            color: white;
+        }
+
+        .card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #00ffcc;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #00ffcc;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00ccaa;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .login-link a {
+            color: #00ffcc;
+            text-decoration: none;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .success {
+            color: #00ffcc;
+        }
+
+        .error {
+            color: #ff4b2b;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>AI Fitness Registration</h2>
+
+    <form id="registerForm">
+
+        <div class="input-group">
+            <label>Full Name</label>
+            <input type="text" id="fullName" required>
+        </div>
+
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="username" required>
+        </div>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="email" required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" required>
+        </div>
+
+        <div class="row">
+            <div class="input-group">
+                <label>Age</label>
+                <input type="number" id="age">
+            </div>
+
+            <div class="input-group">
+                <label>Gender</label>
+                <select id="gender">
+                    <option value="">Select</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-group">
+                <label>Height (cm)</label>
+                <input type="number" id="height">
+            </div>
+
+            <div class="input-group">
+                <label>Weight (kg)</label>
+                <input type="number" id="weight">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Marital Status</label>
+            <select id="maritalStatus">
+                <option value="">Select</option>
+                <option>Single</option>
+                <option>Married</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Fitness Goal</label>
+            <select id="goal">
+                <option value="">Select Goal</option>
+                <option>Weight Loss</option>
+                <option>Muscle Gain</option>
+                <option>Strength Training</option>
+                <option>General Fitness</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Experience Level</label>
+            <select id="experience">
+                <option value="">Select</option>
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Medical Condition</label>
+            <input type="text" id="medicalCondition" placeholder="If any">
+        </div>
+
+        <button type="submit">Register</button>
+
+    </form>
+
+    <div class="message" id="message"></div>
+
+    <div class="login-link">
+        Already have account? <a href="login.html">Login</a>
+    </div>
+
+</div>
+
+<script>
+
+const form = document.getElementById("registerForm");
+const messageBox = document.getElementById("message");
+
+form.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const userData = {
+        fullName: document.getElementById("fullName").value,
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        age: document.getElementById("age").value,
+        gender: document.getElementById("gender").value,
+        height: document.getElementById("height").value,
+        weight: document.getElementById("weight").value,
+        maritalStatus: document.getElementById("maritalStatus").value,
+        goal: document.getElementById("goal").value,
+        experience: document.getElementById("experience").value,
+        medicalCondition: document.getElementById("medicalCondition").value
+    };
+
+    try {
+
+        const res = await fetch("http://localhost:5000/api/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            messageBox.className = "message success";
+            messageBox.innerText = "Registration Successful 🎉 Redirecting...";
+
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1500);
+        } else {
+            messageBox.className = "message error";
+            messageBox.innerText = data.message || "Registration Failed";
+        }
+
+    } catch (error) {
+        messageBox.className = "message error";
+        messageBox.innerText = "Server Error. Make sure backend is running.";
+    }
+
+});
+</script>
+
+</body>
+</html>
