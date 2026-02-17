@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Orbitron:wght@400;700;900&display=swap"
     rel="stylesheet">
 
   <style>
@@ -20,6 +20,8 @@
       --pink: #ff2d6f;
       --orange: #ff6b2b;
       --gold: #ffd700;
+      --green: #00ff88;
+      --purple: #b026ff;
       --bg: #040710;
       --card: rgba(255, 255, 255, 0.038);
       --border: rgba(255, 255, 255, 0.09);
@@ -387,8 +389,6 @@
       text-align: center;
       padding-inline: 20px;
       gap: 28px;
-
-      /* 🔥 Background Image */
       background:
         linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
         url("/bg.jpg") no-repeat center center;
@@ -542,21 +542,306 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
+       WORKOUT TIMER PANEL - NEW FEATURE!
+    ═══════════════════════════════════════════════════════════ */
+    .workout-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(.9);
+      width: min(500px, 90vw);
+      background: rgba(6, 10, 22, .95);
+      border: 2px solid rgba(0, 245, 255, .3);
+      border-radius: 24px;
+      backdrop-filter: blur(28px);
+      box-shadow: 0 0 80px rgba(0, 245, 255, .2), 0 30px 80px rgba(0, 0, 0, .7);
+      z-index: 1050;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s, transform .4s;
+      overflow: hidden;
+    }
+
+    .workout-panel.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .workout-header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(0, 245, 255, .08), rgba(255, 45, 111, .08));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .workout-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, var(--cyan), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .workout-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+    }
+
+    .workout-close:hover {
+      color: var(--pink);
+      border-color: rgba(255, 45, 111, .5);
+      background: rgba(255, 45, 111, .1);
+      transform: rotate(90deg);
+    }
+
+    .workout-body {
+      padding: 28px;
+    }
+
+    /* Timer Display */
+    .timer-display {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .timer-value {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(64px, 12vw, 96px);
+      font-weight: 900;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--green) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 60px rgba(0, 245, 255, .4);
+      animation: timer-glow 2s ease-in-out infinite;
+      line-height: 1;
+    }
+
+    .timer-value.rest-mode {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 50%, var(--orange) 100%);
+      animation: timer-pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes timer-glow {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 245, 255, .4)); }
+      50% { filter: drop-shadow(0 0 40px rgba(0, 245, 255, .7)); }
+    }
+
+    @keyframes timer-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .timer-label {
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    /* Exercise Info */
+    .exercise-info {
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .exercise-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      margin-bottom: 8px;
+    }
+
+    .exercise-stats {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-item strong {
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    /* Timer Controls */
+    .timer-controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .timer-btn {
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timer-btn.start {
+      background: linear-gradient(135deg, var(--green), #00cc6f);
+      color: var(--bg);
+      box-shadow: 0 0 20px rgba(0, 255, 136, .3);
+    }
+
+    .timer-btn.start:hover {
+      box-shadow: 0 0 30px rgba(0, 255, 136, .5);
+      transform: translateY(-2px);
+    }
+
+    .timer-btn.pause {
+      background: linear-gradient(135deg, var(--orange), #cc5522);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(255, 107, 43, .3);
+    }
+
+    .timer-btn.pause:hover {
+      box-shadow: 0 0 30px rgba(255, 107, 43, .5);
+      transform: translateY(-2px);
+    }
+
+    .timer-btn.reset {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .timer-btn.reset:hover {
+      border-color: rgba(255, 45, 111, .5);
+      color: var(--pink);
+      background: rgba(255, 45, 111, .08);
+    }
+
+    /* Rep Counter */
+    .rep-counter {
+      background: linear-gradient(135deg, rgba(0, 245, 255, .08), rgba(176, 38, 255, .08));
+      border: 1px solid rgba(176, 38, 255, .3);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .rep-count {
+      font-family: 'Orbitron', monospace;
+      font-size: 56px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .rep-label {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .rep-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .rep-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid var(--purple);
+      background: rgba(176, 38, 255, .1);
+      color: var(--purple);
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rep-btn:hover {
+      background: rgba(176, 38, 255, .25);
+      box-shadow: 0 0 20px rgba(176, 38, 255, .4);
+      transform: scale(1.1);
+    }
+
+    .rep-btn:active {
+      transform: scale(.95);
+    }
+
+    /* Progress Ring */
+    .progress-ring {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+    }
+
+    .progress-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring-circle {
+      transition: stroke-dashoffset .3s;
+      stroke: var(--cyan);
+      stroke-width: 6;
+      fill: none;
+      filter: drop-shadow(0 0 8px rgba(0, 245, 255, .6));
+    }
+
+    .progress-ring-bg {
+      stroke: rgba(255, 255, 255, .1);
+      stroke-width: 6;
+      fill: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
        CHATBOT PANEL
     ═══════════════════════════════════════════════════════════ */
-    #chatbotimg {
-      width: 46px;
-      height: 46px;
-      cursor: pointer;
-      transition: transform .3s, filter .3s;
-      filter: drop-shadow(0 0 10px rgba(0, 245, 255, .3));
-    }
-
-    #chatbotimg:hover {
-      transform: scale(1.12);
-      filter: drop-shadow(0 0 18px rgba(0, 245, 255, .6));
-    }
-
     .chat-box {
       position: fixed;
       bottom: 90px;
@@ -875,7 +1160,7 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
-       FLOATING FAB AREA (chatbot toggle + voice assistant)
+       FLOATING FAB AREA
     ═══════════════════════════════════════════════════════════ */
     .fab-cluster {
       position: fixed;
@@ -899,6 +1184,16 @@
       justify-content: center;
       font-size: 22px;
       transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .fab-timer {
+      background: linear-gradient(135deg, var(--green), #00aa5a);
+      box-shadow: 0 0 25px rgba(0, 255, 136, .4), 0 8px 25px rgba(0, 0, 0, .4);
+    }
+
+    .fab-timer:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 40px rgba(0, 255, 136, .6);
     }
 
     .fab-chat {
@@ -1244,6 +1539,14 @@
         bottom: 20px;
         right: 16px;
       }
+
+      .workout-panel {
+        width: calc(100vw - 32px);
+      }
+
+      .timer-value {
+        font-size: 56px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1254,6 +1557,10 @@
       .hero-ctas {
         flex-direction: column;
         align-items: center;
+      }
+
+      .timer-value {
+        font-size: 48px;
       }
     }
   </style>
@@ -1271,16 +1578,13 @@
       <div class="logo">Fit Club</div>
     </a>
 
-    <!-- Right side: select + auth buttons -->
     <div class="nav-right">
-      <!-- Auth buttons (desktop) -->
       <button class="btn login" id="loginBtn" onclick="location.href='pages/login.html'">Login</button>
       <button class="btn register" id="registerBtn" onclick="location.href='pages/register.html'">Register</button>
       <button class="btn admin" id="adminBtn" onclick="location.href='pages/admin.html'">Admin</button>
       <button class="btn logout" id="logoutBtn" style="display:none">Logout</button>
     </div>
 
-    <!-- Mobile hamburger -->
     <button class="hamburger" id="hamburger" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
@@ -1298,15 +1602,14 @@
   <main>
     <div class="hero-eyebrow">⚡ Powered by Gemini AI &amp; Voice Recognition</div>
     <h1 class="bgtext">AI Powered<br>Fitness System</h1>
-    <p class="hero-sub">Your intelligent training companion. Ask questions, get personalised workout plans, and let your
-      voice guide the way.</p>
+    <p class="hero-sub">Your intelligent training companion with workout timer, rep counter, AI chat, and voice commands.</p>
 
     <div class="hero-ctas">
-      <button class="cta-primary" onclick="openChat()">
-        💬 Start AI Chat
+      <button class="cta-primary" onclick="openWorkout()">
+        ⏱️ Start Workout
       </button>
       <button class="cta-secondary" onclick="startVoice()">
-        🎙️ Talk to Assistant
+        🎙️ Voice Assistant
       </button>
     </div>
 
@@ -1326,9 +1629,62 @@
     </div>
   </main>
 
+  <!-- ═══════════ WORKOUT TIMER PANEL ═══════════ -->
+  <div class="workout-panel" id="workoutPanel">
+    <div class="workout-header">
+      <div class="workout-title">⏱️ Workout Timer</div>
+      <button class="workout-close" onclick="closeWorkout()">✕</button>
+    </div>
+
+    <div class="workout-body">
+      <!-- Exercise Info -->
+      <div class="exercise-info">
+        <div class="exercise-name" id="exerciseName">Bench Press</div>
+        <div class="exercise-stats">
+          <div class="stat-item">
+            <span>Sets:</span>
+            <strong id="setsCount">3</strong>
+          </div>
+          <div class="stat-item">
+            <span>Target Reps:</span>
+            <strong id="targetReps">12</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timer Display -->
+      <div class="timer-display">
+        <div class="timer-value" id="timerValue">00:00</div>
+        <div class="timer-label" id="timerLabel">READY TO START</div>
+      </div>
+
+      <!-- Timer Controls -->
+      <div class="timer-controls">
+        <button class="timer-btn start" id="startBtn" onclick="toggleTimer()">
+          ▶️ START
+        </button>
+        <button class="timer-btn pause" id="pauseBtn" onclick="toggleTimer()" style="display:none">
+          ⏸️ PAUSE
+        </button>
+        <button class="timer-btn reset" onclick="resetTimer()">
+          🔄 RESET
+        </button>
+      </div>
+
+      <!-- Rep Counter -->
+      <div class="rep-counter">
+        <div class="rep-count" id="repCount">0</div>
+        <div class="rep-label">REPS COMPLETED</div>
+        <div class="rep-controls">
+          <button class="rep-btn" onclick="decrementReps()">−</button>
+          <button class="rep-btn" onclick="incrementReps()">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══════════ CHATBOT PANEL ═══════════ -->
   <div class="chat-box" id="chatBox">
-    <!-- Header -->
     <div class="chat-header">
       <div class="chat-header-avatar">🤖</div>
       <div class="chat-header-info">
@@ -1340,22 +1696,19 @@
       </div>
     </div>
 
-    <!-- Mode tabs -->
     <div class="chat-modes">
       <button class="mode-tab active" data-mode="fitness">🏋️ Fitness</button>
       <button class="mode-tab" data-mode="nutrition">🥗 Nutrition</button>
       <button class="mode-tab" data-mode="general">💡 General</button>
     </div>
 
-    <!-- Messages -->
     <div class="chat-container" id="chatContainer">
       <div class="chat-welcome" id="chatWelcome">
         <h3>Hello, Champion! 👋</h3>
-        <p>Ask me anything about workouts, nutrition, or fitness goals. Try a suggestion below!</p>
+        <p>Ask me anything about workouts, nutrition, or fitness goals!</p>
       </div>
     </div>
 
-    <!-- Quick suggestions -->
     <div class="suggestions" id="suggestionsArea">
       <button class="chip" onclick="sendSuggestion('Best chest workout for beginners?')">Chest beginner</button>
       <button class="chip" onclick="sendSuggestion('How many calories should I eat daily?')">Calorie guide</button>
@@ -1363,7 +1716,6 @@
       <button class="chip" onclick="sendSuggestion('How to build bigger biceps fast?')">Biceps tips</button>
     </div>
 
-    <!-- Input -->
     <div class="input-area">
       <button class="voice-input-btn" id="voiceInputBtn" title="Voice input" onclick="startVoiceInput()">🎙️</button>
       <input type="text" class="prompt" id="chatPrompt" placeholder="Ask about workouts, nutrition…">
@@ -1379,6 +1731,7 @@
   <div class="fab-cluster">
     <button class="fab fab-voice" id="fabVoice" title="Voice Assistant" onclick="startVoice()">🎙️</button>
     <button class="fab fab-chat" id="fabChat" title="AI Chat" onclick="toggleChat()">💬</button>
+    <button class="fab fab-timer" id="fabTimer" title="Workout Timer" onclick="toggleWorkout()">⏱️</button>
   </div>
 
   <!-- ═══════════ VOICE OVERLAY ═══════════ -->
@@ -1402,7 +1755,7 @@
     </div>
     <div class="speak-transcript" id="speakTranscript">Say a command or question…</div>
     <p style="font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">
-      Try: "Open chat" • "Chest workout" • "What time is it?"
+      Try: "Start timer" • "Add 5 reps" • "Open chat" • "What time is it?"
     </p>
   </div>
 
@@ -1475,6 +1828,95 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
+       WORKOUT TIMER LOGIC
+    ═══════════════════════════════════════════════════════════ */
+    const workoutPanel = document.getElementById('workoutPanel');
+    const timerValue = document.getElementById('timerValue');
+    const timerLabel = document.getElementById('timerLabel');
+    const repCount = document.getElementById('repCount');
+    const startBtn = document.getElementById('startBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+
+    let timerInterval = null;
+    let seconds = 0;
+    let reps = 0;
+    let isRunning = false;
+
+    function openWorkout() {
+      workoutPanel.classList.add('active');
+      toast('Workout timer opened! 💪', 'success');
+    }
+
+    function closeWorkout() {
+      workoutPanel.classList.remove('active');
+      if (isRunning) toggleTimer();
+    }
+
+    function toggleWorkout() {
+      workoutPanel.classList.toggle('active');
+    }
+
+    function toggleTimer() {
+      isRunning = !isRunning;
+      
+      if (isRunning) {
+        startBtn.style.display = 'none';
+        pauseBtn.style.display = 'flex';
+        timerLabel.textContent = 'WORKOUT IN PROGRESS';
+        timerValue.classList.remove('rest-mode');
+        
+        timerInterval = setInterval(() => {
+          seconds++;
+          updateTimerDisplay();
+        }, 1000);
+        
+        toast('Timer started! 🔥', 'success');
+      } else {
+        startBtn.style.display = 'flex';
+        pauseBtn.style.display = 'none';
+        timerLabel.textContent = 'PAUSED';
+        clearInterval(timerInterval);
+        
+        toast('Timer paused', 'info');
+      }
+    }
+
+    function resetTimer() {
+      if (isRunning) toggleTimer();
+      seconds = 0;
+      reps = 0;
+      updateTimerDisplay();
+      repCount.textContent = '0';
+      timerLabel.textContent = 'READY TO START';
+      timerValue.classList.remove('rest-mode');
+      toast('Timer reset! ✅', 'info');
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      timerValue.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function incrementReps() {
+      reps++;
+      repCount.textContent = reps;
+      
+      // Haptic feedback effect
+      repCount.style.transform = 'scale(1.2)';
+      setTimeout(() => repCount.style.transform = 'scale(1)', 200);
+      
+      toast(`Rep ${reps} completed! 💪`, 'success', 1500);
+    }
+
+    function decrementReps() {
+      if (reps > 0) {
+        reps--;
+        repCount.textContent = reps;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
        CHATBOT
     ═══════════════════════════════════════════════════════════ */
     const chatBox = document.getElementById('chatBox');
@@ -1487,7 +1929,6 @@
     let currentMode = 'fitness';
     let userMessage = '';
 
-    // Mode tabs
     document.querySelectorAll('.mode-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
@@ -1511,7 +1952,7 @@
       sendMessage();
     }
 
-    const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyA69zSyEQAM2icDMk-fnMOzNJmaR4aAuxo";
+    const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=AIzaSyA69zSyEQAM2icDMk-fnMOzNJmaR4aAuxo";
 
     const modePrompts = {
       fitness: 'You are a professional fitness trainer. Answer concisely in under 80 words.',
@@ -1559,11 +2000,9 @@
       userMessage = chatPrompt.value.trim();
       if (!userMessage) return;
 
-      // Hide welcome
       if (chatWelcome) chatWelcome.style.display = 'none';
       suggestionsArea.style.display = 'none';
 
-      // User bubble
       const userBox = createMsg(`<div class="text"></div>`, 'user-chat-box');
       userBox.querySelector('.text').textContent = userMessage;
       chatContainer.appendChild(userBox);
@@ -1571,7 +2010,6 @@
       chatPrompt.value = '';
       chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      // AI typing bubble
       setTimeout(() => {
         const aiBox = createMsg(
           `<div class="text"></div>
@@ -1592,14 +2030,15 @@
     chatPrompt.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
 
     /* ═══════════════════════════════════════════════════════════
-       VOICE ASSISTANT
+       VOICE ASSISTANT - EXTENDED TIMEOUT & MORE COMMANDS
     ═══════════════════════════════════════════════════════════ */
     const speakOverlay = document.getElementById('speakOverlay');
     const speakTranscript = document.getElementById('speakTranscript');
     const fabVoice = document.getElementById('fabVoice');
     const voiceInputBtn = document.getElementById('voiceInputBtn');
 
-    let isVoiceInputMode = false; // true = transcribe to chat, false = assistant commands
+    let isVoiceInputMode = false;
+    let voiceTimeout = null;
 
     function speak(text) {
       const u = new SpeechSynthesisUtterance(text);
@@ -1615,11 +2054,14 @@
 
     if (SpeechRec) {
       recognition = new SpeechRec();
-      recognition.continuous = false;
+      recognition.continuous = true; // Keep listening
       recognition.interimResults = true;
       recognition.lang = 'en-US';
+      recognition.maxAlternatives = 1;
 
       recognition.onresult = event => {
+        clearTimeout(voiceTimeout); // Reset timeout on new speech
+        
         const idx = event.resultIndex;
         const transcript = event.results[idx][0].transcript;
         const isFinal = event.results[idx].isFinal;
@@ -1627,24 +2069,33 @@
         speakTranscript.textContent = transcript;
 
         if (isFinal) {
-          if (isVoiceInputMode) {
-            chatPrompt.value = transcript;
-            closeVoice();
-            sendMessage();
-          } else {
-            takeCommand(transcript.toLowerCase());
-            setTimeout(closeVoice, 1200);
-          }
+          // Set 3-second timeout after final result
+          voiceTimeout = setTimeout(() => {
+            if (isVoiceInputMode) {
+              chatPrompt.value = transcript;
+              closeVoice();
+              sendMessage();
+            } else {
+              takeCommand(transcript.toLowerCase());
+              setTimeout(closeVoice, 1000);
+            }
+          }, 2000);
         }
       };
 
       recognition.onerror = e => {
-        speakTranscript.textContent = 'Could not hear you. Try again.';
-        console.error('Recognition error:', e.error);
-        setTimeout(closeVoice, 1500);
+        if (e.error !== 'no-speech') {
+          speakTranscript.textContent = 'Could not hear you. Try again.';
+          console.error('Recognition error:', e.error);
+          setTimeout(closeVoice, 1500);
+        }
       };
 
       recognition.onend = () => {
+        if (speakOverlay.classList.contains('active') && !isVoiceInputMode) {
+          // Restart if still in command mode
+          try { recognition.start(); } catch(e) {}
+        }
         fabVoice.classList.remove('listening');
         voiceInputBtn.classList.remove('listening');
       };
@@ -1656,7 +2107,7 @@
       speakTranscript.textContent = 'Say a command or question…';
       speakOverlay.classList.add('active');
       fabVoice.classList.add('listening');
-      recognition.start();
+      try { recognition.start(); } catch(e) {}
     }
 
     function startVoiceInput() {
@@ -1665,47 +2116,95 @@
       speakTranscript.textContent = 'Speak your question…';
       speakOverlay.classList.add('active');
       voiceInputBtn.classList.add('listening');
-      recognition.start();
+      try { recognition.start(); } catch(e) {}
     }
 
     function closeVoice() {
+      clearTimeout(voiceTimeout);
       speakOverlay.classList.remove('active');
       fabVoice.classList.remove('listening');
       voiceInputBtn.classList.remove('listening');
-      try { recognition.abort(); } catch (e) { }
+      try { recognition.stop(); } catch (e) { }
     }
 
     function takeCommand(msg) {
-      if (msg.includes('open') && msg.includes('chat')) {
-        speak('Opening chat'); openChat();
+      // Timer commands
+      if (msg.includes('start timer') || msg.includes('begin workout')) {
+        speak('Starting workout timer');
+        openWorkout();
+        if (!isRunning) toggleTimer();
+      } else if (msg.includes('stop timer') || msg.includes('pause timer')) {
+        speak('Pausing timer');
+        if (isRunning) toggleTimer();
+      } else if (msg.includes('reset timer')) {
+        speak('Resetting timer');
+        resetTimer();
+      } else if (msg.includes('close timer') || msg.includes('close workout')) {
+        speak('Closing workout timer');
+        closeWorkout();
+      }
+      
+      // Rep commands
+      else if (msg.includes('add') && (msg.includes('rep') || msg.includes('reps'))) {
+        const match = msg.match(/add (\d+)/);
+        const count = match ? parseInt(match[1]) : 1;
+        for (let i = 0; i < count; i++) incrementReps();
+        speak(`Added ${count} ${count === 1 ? 'rep' : 'reps'}`);
+      } else if (msg.includes('rep') || msg.includes('reps')) {
+        incrementReps();
+        speak('Rep counted');
+      }
+      
+      // Chat commands
+      else if (msg.includes('open') && msg.includes('chat')) {
+        speak('Opening chat');
+        openChat();
       } else if (msg.includes('close') && msg.includes('chat')) {
-        speak('Closing chat'); chatBox.classList.remove('active-chat-box'); fabChat.textContent = '💬';
-      } else if (msg.includes('back')) {
-        speak('Opening back workout'); window.location.href = 'back.html';
+        speak('Closing chat');
+        chatBox.classList.remove('active-chat-box');
+        fabChat.textContent = '💬';
+      }
+      
+      // Navigation commands
+      else if (msg.includes('back')) {
+        speak('Opening back workout');
+        window.location.href = 'back.html';
       } else if (msg.includes('chest')) {
-        speak('Opening chest workout'); window.location.href = 'chest.html';
+        speak('Opening chest workout');
+        window.location.href = 'chest.html';
       } else if (msg.includes('bicep') || msg.includes('tricep')) {
-        speak('Opening arms workout'); window.location.href = 'biceps-triceps.html';
+        speak('Opening arms workout');
+        window.location.href = 'biceps-triceps.html';
       } else if (msg.includes('shoulder')) {
-        speak('Opening shoulder workout'); window.location.href = 'shoulder.html';
+        speak('Opening shoulder workout');
+        window.location.href = 'shoulder.html';
       } else if (msg.includes('leg')) {
-        speak('Opening leg workout'); window.location.href = 'leg.html';
+        speak('Opening leg workout');
+        window.location.href = 'leg.html';
       } else if (msg.includes('home')) {
-        speak('Going home'); window.location.href = 'index.html';
-      } else if (msg.includes('hello') || msg.includes('hey') || msg.includes('hi')) {
+        speak('Going home');
+        window.location.href = 'index.html';
+      }
+      
+      // General commands
+      else if (msg.includes('hello') || msg.includes('hey') || msg.includes('hi')) {
         speak('Hello! How can I help you today?');
       } else if (msg.includes('who are you')) {
-        speak('I am Fit AI, your personal fitness assistant.');
+        speak('I am Fit AI, your personal fitness assistant with workout timer and rep counter.');
       } else if (msg.includes('youtube')) {
-        speak('Opening YouTube'); window.open('https://youtube.com/', '_blank');
+        speak('Opening YouTube');
+        window.open('https://youtube.com/', '_blank');
       } else if (msg.includes('google')) {
-        speak('Opening Google'); window.open('https://google.com/', '_blank');
+        speak('Opening Google');
+        window.open('https://google.com/', '_blank');
       } else if (msg.includes('time')) {
         const t = new Date().toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
-        speak(`The time is ${t}`); speakTranscript.textContent = `🕐 ${t}`;
+        speak(`The time is ${t}`);
+        speakTranscript.textContent = `🕐 ${t}`;
       } else if (msg.includes('date')) {
         const d = new Date().toLocaleString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
-        speak(`Today is ${d}`); speakTranscript.textContent = `📅 ${d}`;
+        speak(`Today is ${d}`);
+        speakTranscript.textContent = `📅 ${d}`;
       } else {
         // Pass to AI chatbot
         speak('Let me check that for you');

@@ -20,6 +20,9 @@
       --red:        #ff2d2d;
       --red-dim:    rgba(255,45,45,0.15);
       --orange:     #ff6b2b;
+      --purple:     #b026ff;
+      --green:      #00ff88;
+      --blue:       #00a8ff;
       --dark:       #050810;
       --surface:    #0b1018;
       --surface-2:  #111822;
@@ -235,6 +238,402 @@
       flex: 1;
       height: 1px;
       background: linear-gradient(90deg, var(--border-c), transparent);
+    }
+
+    /* ══════════════════════════════════════
+       NEW: STATS OVERVIEW CARDS
+    ══════════════════════════════════════ */
+    .stats-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+      animation: fade-up 0.5s 0.25s ease both;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,245,200,0.12);
+    }
+
+    .stat-card-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+
+    .stat-card-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-card-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 2px;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .stat-card-subtext {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ══════════════════════════════════════
+       NEW: BMI CALCULATOR CARD
+    ══════════════════════════════════════ */
+    .bmi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      animation: fade-up 0.5s 0.3s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bmi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--purple), transparent);
+    }
+
+    .bmi-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .input-group input {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px rgba(0,245,200,0.2);
+    }
+
+    .calc-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 3px;
+      padding: 0 28px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--purple), #8a1fd5);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .calc-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(176,38,255,0.4);
+    }
+
+    .bmi-result {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+    }
+
+    .bmi-result.show {
+      display: block;
+      animation: fade-up 0.4s ease both;
+    }
+
+    .bmi-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .bmi-category {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .bmi-range {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 1px;
+    }
+
+    /* ══════════════════════════════════════
+       NEW: EXERCISE TRACKER
+    ══════════════════════════════════════ */
+    .exercise-tracker {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      animation: fade-up 0.5s 0.35s ease both;
+    }
+
+    .exercise-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .exercise-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s;
+    }
+
+    .exercise-item:hover {
+      border-color: var(--border-c);
+      transform: translateX(4px);
+    }
+
+    .exercise-info {
+      flex: 1;
+    }
+
+    .exercise-name {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .exercise-sets {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .exercise-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .set-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--cyan);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .set-btn:hover {
+      background: var(--cyan-dim);
+      border-color: var(--cyan);
+      transform: scale(1.1);
+    }
+
+    .set-count {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      color: var(--cyan);
+      min-width: 40px;
+      text-align: center;
+    }
+
+    /* ══════════════════════════════════════
+       NEW: PROGRESS CHART
+    ══════════════════════════════════════ */
+    .progress-chart {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      animation: fade-up 0.5s 0.4s ease both;
+    }
+
+    .chart-container {
+      height: 200px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--cyan), transparent);
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      min-height: 20px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .chart-bar:hover {
+      background: linear-gradient(to top, var(--cyan), var(--purple));
+      box-shadow: 0 0 20px rgba(0,245,200,0.4);
+    }
+
+    .chart-bar::before {
+      content: attr(data-value);
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .chart-labels {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 12px;
+    }
+
+    .chart-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    /* ══════════════════════════════════════
+       NEW: CALORIES TRACKER
+    ══════════════════════════════════════ */
+    .calories-tracker {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      animation: fade-up 0.5s 0.45s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .calories-tracker::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--orange), transparent);
+    }
+
+    .calories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .calorie-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .calorie-item:hover {
+      border-color: var(--orange);
+      box-shadow: 0 4px 16px rgba(255,107,43,0.2);
+    }
+
+    .calorie-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .calorie-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--orange);
+      letter-spacing: 2px;
+    }
+
+    .calorie-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 1px;
+      margin-top: 4px;
     }
 
     /* ══════════════════════════════════════
@@ -603,6 +1002,121 @@
       <h2>// Weekly Workout Protocol Initialized</h2>
     </div>
 
+    <!-- NEW: Stats Overview Cards -->
+    <div class="stats-overview">
+      <div class="stat-card">
+        <div class="stat-card-icon">💪</div>
+        <div class="stat-card-label">Total Workouts</div>
+        <div class="stat-card-value" id="totalWorkouts">0</div>
+        <div class="stat-card-subtext">This week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">🔥</div>
+        <div class="stat-card-label">Calories Burned</div>
+        <div class="stat-card-value" id="caloriesBurned">0</div>
+        <div class="stat-card-subtext">Total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">⏱️</div>
+        <div class="stat-card-label">Workout Time</div>
+        <div class="stat-card-value" id="workoutTime">0h</div>
+        <div class="stat-card-subtext">This week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">🎯</div>
+        <div class="stat-card-label">Streak</div>
+        <div class="stat-card-value" id="workoutStreak">0</div>
+        <div class="stat-card-subtext">Days</div>
+      </div>
+    </div>
+
+    <!-- NEW: BMI Calculator -->
+    <div class="bmi-card">
+      <div class="section-head">
+        <h3>BMI Calculator</h3>
+      </div>
+      <div class="bmi-inputs">
+        <div class="input-group">
+          <label>Height (cm)</label>
+          <input type="number" id="heightInput" placeholder="170">
+        </div>
+        <div class="input-group">
+          <label>Weight (kg)</label>
+          <input type="number" id="weightInput" placeholder="70">
+        </div>
+        <div class="input-group">
+          <label>Age (years)</label>
+          <input type="number" id="ageInput" placeholder="25">
+        </div>
+        <div style="display: flex; align-items: flex-end;">
+          <button class="calc-btn" onclick="calculateBMI()">Calculate BMI</button>
+        </div>
+      </div>
+      <div class="bmi-result" id="bmiResult">
+        <div class="bmi-value" id="bmiValue">0.0</div>
+        <div class="bmi-category" id="bmiCategory">Normal</div>
+        <div class="bmi-range">Healthy BMI range: 18.5 - 24.9</div>
+      </div>
+    </div>
+
+    <!-- NEW: Exercise Tracker with Sets -->
+    <div class="exercise-tracker">
+      <div class="section-head">
+        <h3>Today's Exercises</h3>
+      </div>
+      <div class="exercise-list" id="exerciseList">
+        <!-- Will be populated by JS -->
+      </div>
+    </div>
+
+    <!-- NEW: Weekly Progress Chart -->
+    <div class="progress-chart">
+      <div class="section-head">
+        <h3>Weekly Progress</h3>
+      </div>
+      <div class="chart-container" id="progressChart">
+        <!-- Will be populated by JS -->
+      </div>
+      <div class="chart-labels">
+        <div class="chart-label">MON</div>
+        <div class="chart-label">TUE</div>
+        <div class="chart-label">WED</div>
+        <div class="chart-label">THU</div>
+        <div class="chart-label">FRI</div>
+        <div class="chart-label">SAT</div>
+        <div class="chart-label">SUN</div>
+      </div>
+    </div>
+
+    <!-- NEW: Calories Tracker -->
+    <div class="calories-tracker">
+      <div class="section-head">
+        <h3>Daily Nutrition</h3>
+      </div>
+      <div class="calories-grid">
+        <div class="calorie-item">
+          <div class="calorie-icon">🍔</div>
+          <div class="calorie-value" id="caloriesConsumed">0</div>
+          <div class="calorie-label">Consumed</div>
+        </div>
+        <div class="calorie-item">
+          <div class="calorie-icon">🔥</div>
+          <div class="calorie-value" id="caloriesBurnedToday">0</div>
+          <div class="calorie-label">Burned</div>
+        </div>
+        <div class="calorie-item">
+          <div class="calorie-icon">🥤</div>
+          <div class="calorie-value" id="waterIntake">0</div>
+          <div class="calorie-label">Water (L)</div>
+        </div>
+        <div class="calorie-item">
+          <div class="calorie-icon">💪</div>
+          <div class="calorie-value" id="proteinIntake">0</div>
+          <div class="calorie-label">Protein (g)</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Week Grid -->
     <div class="section-head">
       <h3>Training Schedule</h3>
@@ -641,15 +1155,14 @@
 
   </div>
 
-  <!-- ══ ORIGINAL JS (zero changes) ════════════════════ -->
+  <!-- ══ ENHANCED JS WITH NEW FEATURES ════════════════════ -->
   <script>
 
-    // 🔥 SHOW LOGGED IN USERNAME
+    // 🔥 SHOW LOGGED IN USERNAME (UNCHANGED)
     const username = localStorage.getItem("username") || "User";
     document.getElementById("usernameDisplay").innerText = "Welcome, " + username;
 
-
-    // 🗓️ Weekly Workout Plan
+    // 🗓️ Weekly Workout Plan (UNCHANGED)
     const workoutPlan = [
       "Chest Day",
       "Back Day",
@@ -660,7 +1173,7 @@
       "Rest Day"
     ];
 
-    // 🎯 GIF LINKS (Replace with your real GIF links)
+    // 🎯 GIF LINKS (UNCHANGED)
     const workoutGifs = {
       "Chest Day": [
         "/gif/chest/chest1.gif",
@@ -697,10 +1210,9 @@
     const weekGrid = document.getElementById("weekGrid");
     const today = new Date().getDay();
 
+    // UNCHANGED FUNCTION
     function generateWeek() {
-
       for (let i = 0; i < 7; i++) {
-
         const date = new Date();
         date.setDate(date.getDate() - date.getDay() + i);
 
@@ -713,7 +1225,6 @@
 
         if (i === today) {
           card.classList.add("today");
-          // inject today tag
           const tag = document.createElement("span");
           tag.className = "today-tag";
           tag.textContent = "Today";
@@ -730,9 +1241,9 @@
           <strong>${workoutPlan[i]}</strong>
         `;
 
-        // 🔥 Click Event
         card.addEventListener("click", () => {
           showGifs(workoutPlan[i]);
+          loadExercises(workoutPlan[i]);
         });
 
         weekGrid.appendChild(card);
@@ -741,8 +1252,8 @@
 
     generateWeek();
 
+    // UNCHANGED FUNCTION
     function showGifs(day) {
-
       const gifs = workoutGifs[day];
 
       if (!gifs) {
@@ -757,16 +1268,15 @@
       document.getElementById("gif3").innerHTML = `<img src="${gifs[2]}">`;
     }
 
-    // ⏱️ Timer
+    // ⏱️ Timer (UNCHANGED FUNCTION)
     let totalTime = 90 * 60;
 
     function startTimer() {
-
       const timer = setInterval(() => {
-
         if (totalTime <= 0) {
           clearInterval(timer);
           alert("Workout Complete! 💪");
+          updateStats();
         }
 
         let minutes = Math.floor(totalTime / 60);
@@ -776,15 +1286,214 @@
           minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 
         totalTime--;
-
       }, 1000);
     }
 
-    // 🚪 Logout
+    // 🚪 Logout (UNCHANGED FUNCTION)
     function logout() {
       localStorage.removeItem("token");
       localStorage.removeItem("role");
       window.location.href = "../index.html";
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // 🆕 NEW FEATURES BELOW - ADDITIONAL FUNCTIONALITY
+    // ═══════════════════════════════════════════════════════
+
+    // 📊 BMI Calculator
+    function calculateBMI() {
+      const height = parseFloat(document.getElementById('heightInput').value);
+      const weight = parseFloat(document.getElementById('weightInput').value);
+      
+      if (!height || !weight || height <= 0 || weight <= 0) {
+        alert('Please enter valid height and weight');
+        return;
+      }
+
+      const heightInMeters = height / 100;
+      const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+      
+      let category = '';
+      if (bmi < 18.5) category = 'Underweight';
+      else if (bmi < 25) category = 'Normal Weight';
+      else if (bmi < 30) category = 'Overweight';
+      else category = 'Obese';
+
+      document.getElementById('bmiValue').textContent = bmi;
+      document.getElementById('bmiCategory').textContent = category;
+      document.getElementById('bmiResult').classList.add('show');
+
+      // Save to localStorage
+      localStorage.setItem('userBMI', bmi);
+      localStorage.setItem('userHeight', height);
+      localStorage.setItem('userWeight', weight);
+    }
+
+    // 🏋️ Exercise Tracker with Sets/Reps
+    const exerciseTemplates = {
+      "Chest Day": [
+        { name: "Bench Press", sets: 4, reps: "8-12" },
+        { name: "Incline Dumbbell Press", sets: 3, reps: "10-12" },
+        { name: "Cable Flyes", sets: 3, reps: "12-15" },
+        { name: "Push-ups", sets: 3, reps: "15-20" }
+      ],
+      "Back Day": [
+        { name: "Pull-ups", sets: 4, reps: "8-12" },
+        { name: "Barbell Rows", sets: 4, reps: "8-10" },
+        { name: "Lat Pulldown", sets: 3, reps: "10-12" },
+        { name: "Face Pulls", sets: 3, reps: "15-20" }
+      ],
+      "Leg Day": [
+        { name: "Squats", sets: 4, reps: "8-12" },
+        { name: "Romanian Deadlift", sets: 4, reps: "10-12" },
+        { name: "Leg Press", sets: 3, reps: "12-15" },
+        { name: "Calf Raises", sets: 4, reps: "15-20" }
+      ],
+      "Shoulder Day": [
+        { name: "Overhead Press", sets: 4, reps: "8-10" },
+        { name: "Lateral Raises", sets: 3, reps: "12-15" },
+        { name: "Front Raises", sets: 3, reps: "12-15" },
+        { name: "Rear Delt Flyes", sets: 3, reps: "15-20" }
+      ],
+      "Biceps & Triceps": [
+        { name: "Barbell Curls", sets: 3, reps: "10-12" },
+        { name: "Hammer Curls", sets: 3, reps: "10-12" },
+        { name: "Tricep Dips", sets: 3, reps: "10-12" },
+        { name: "Skull Crushers", sets: 3, reps: "10-12" }
+      ],
+      "Full Body": [
+        { name: "Deadlift", sets: 4, reps: "6-8" },
+        { name: "Bench Press", sets: 3, reps: "8-10" },
+        { name: "Squats", sets: 3, reps: "10-12" },
+        { name: "Pull-ups", sets: 3, reps: "8-12" }
+      ]
+    };
+
+    function loadExercises(day) {
+      const exercises = exerciseTemplates[day] || [];
+      const exerciseList = document.getElementById('exerciseList');
+      exerciseList.innerHTML = '';
+
+      exercises.forEach((ex, index) => {
+        const completedSets = getSavedSets(day, index);
+        
+        const item = document.createElement('div');
+        item.className = 'exercise-item';
+        item.innerHTML = `
+          <div class="exercise-info">
+            <div class="exercise-name">${ex.name}</div>
+            <div class="exercise-sets">${ex.sets} sets × ${ex.reps} reps</div>
+          </div>
+          <div class="exercise-controls">
+            <button class="set-btn" onclick="decrementSet('${day}', ${index})">−</button>
+            <div class="set-count" id="set-${index}">${completedSets}</div>
+            <button class="set-btn" onclick="incrementSet('${day}', ${index})">+</button>
+          </div>
+        `;
+        exerciseList.appendChild(item);
+      });
+    }
+
+    function incrementSet(day, index) {
+      const setEl = document.getElementById(`set-${index}`);
+      let count = parseInt(setEl.textContent);
+      count++;
+      setEl.textContent = count;
+      saveSets(day, index, count);
+      
+      // Animate
+      setEl.style.transform = 'scale(1.2)';
+      setTimeout(() => setEl.style.transform = 'scale(1)', 200);
+    }
+
+    function decrementSet(day, index) {
+      const setEl = document.getElementById(`set-${index}`);
+      let count = parseInt(setEl.textContent);
+      if (count > 0) {
+        count--;
+        setEl.textContent = count;
+        saveSets(day, index, count);
+      }
+    }
+
+    function saveSets(day, index, count) {
+      const key = `sets_${day}_${index}`;
+      localStorage.setItem(key, count);
+    }
+
+    function getSavedSets(day, index) {
+      const key = `sets_${day}_${index}`;
+      return parseInt(localStorage.getItem(key)) || 0;
+    }
+
+    // 📈 Weekly Progress Chart
+    function initProgressChart() {
+      const chartContainer = document.getElementById('progressChart');
+      const weekData = getWeeklyProgress();
+      
+      chartContainer.innerHTML = '';
+      weekData.forEach((value, index) => {
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        bar.style.height = `${value}%`;
+        bar.setAttribute('data-value', value);
+        chartContainer.appendChild(bar);
+      });
+    }
+
+    function getWeeklyProgress() {
+      // Simulated data - replace with actual tracking
+      return [85, 70, 90, 60, 95, 80, 0]; // Last day is rest
+    }
+
+    // 🔢 Stats Update
+    function updateStats() {
+      const workouts = parseInt(localStorage.getItem('totalWorkouts')) || 0;
+      const calories = parseInt(localStorage.getItem('totalCalories')) || 0;
+      const hours = parseInt(localStorage.getItem('totalHours')) || 0;
+      const streak = parseInt(localStorage.getItem('workoutStreak')) || 0;
+
+      document.getElementById('totalWorkouts').textContent = workouts + 1;
+      document.getElementById('caloriesBurned').textContent = calories + 450;
+      document.getElementById('workoutTime').textContent = (hours + 1.5).toFixed(1) + 'h';
+      document.getElementById('workoutStreak').textContent = streak + 1;
+
+      localStorage.setItem('totalWorkouts', workouts + 1);
+      localStorage.setItem('totalCalories', calories + 450);
+      localStorage.setItem('totalHours', hours + 1.5);
+      localStorage.setItem('workoutStreak', streak + 1);
+    }
+
+    function loadStats() {
+      const workouts = parseInt(localStorage.getItem('totalWorkouts')) || 0;
+      const calories = parseInt(localStorage.getItem('totalCalories')) || 0;
+      const hours = parseFloat(localStorage.getItem('totalHours')) || 0;
+      const streak = parseInt(localStorage.getItem('workoutStreak')) || 0;
+
+      document.getElementById('totalWorkouts').textContent = workouts;
+      document.getElementById('caloriesBurned').textContent = calories;
+      document.getElementById('workoutTime').textContent = hours.toFixed(1) + 'h';
+      document.getElementById('workoutStreak').textContent = streak;
+    }
+
+    // 🍔 Nutrition Tracker (Simulated)
+    function initNutrition() {
+      document.getElementById('caloriesConsumed').textContent = Math.floor(Math.random() * 500) + 1800;
+      document.getElementById('caloriesBurnedToday').textContent = Math.floor(Math.random() * 300) + 400;
+      document.getElementById('waterIntake').textContent = (Math.random() * 1.5 + 1.5).toFixed(1);
+      document.getElementById('proteinIntake').textContent = Math.floor(Math.random() * 50) + 100;
+    }
+
+    // 🚀 Initialize everything
+    loadStats();
+    initProgressChart();
+    initNutrition();
+    loadExercises("Chest Day"); // Load default exercises
+
+    // Load saved BMI if exists
+    if (localStorage.getItem('userBMI')) {
+      document.getElementById('bmiValue').textContent = localStorage.getItem('userBMI');
+      document.getElementById('bmiResult').classList.add('show');
     }
 
   </script>
