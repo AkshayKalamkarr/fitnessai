@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const path = require("path");
 
 dotenv.config();
 
@@ -8,6 +9,9 @@ const connectDB = require("./config/db");
 
 // Create App
 const app = express();
+
+app.use(express.static(path.join(__dirname, "pages")));
+
 
 // Connect Database
 connectDB();

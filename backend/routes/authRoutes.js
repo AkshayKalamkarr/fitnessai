@@ -17,7 +17,21 @@ const defaultPlan = [
 // Register
 router.post("/register", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const {
+      fullName,
+      username,
+      email,
+      password,
+      age,
+      gender,
+      height,
+      weight,
+      maritalStatus,
+      goal,
+      experience,
+      medicalCondition,
+
+    } = req.body;
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields required" });
@@ -29,9 +43,18 @@ router.post("/register", async (req, res) => {
     }
 
     const newUser = new User({
+      fullName,
       username,
       email,
       password,
+      age,
+      gender,
+      height,
+      weight,
+      maritalStatus,
+      goal,
+      experience,
+      medicalCondition,
       weeklyPlan: defaultPlan,
     });
 
